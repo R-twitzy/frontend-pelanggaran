@@ -55,7 +55,7 @@ export default function Pelanggaran() {
                 setPelanggaran(response.data)
 
                 // call showtoast
-                showToast(`Data Pelanggaran berhasil dimuat`)
+                //showToast(`Data Pelanggaran berhasil dimuat`)
             })
             .catch(error => console.log(error))
     }
@@ -95,12 +95,12 @@ export default function Pelanggaran() {
 
             /** send data */
             axios.post(endpoint, request, authorization)
-            .then(response => {
-                showToast(response.data.message)
-                /** refresh data pelanggaran */
-                getData()
-            })
-            .catch(error => console.log(error))
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh data pelanggaran */
+                    getData()
+                })
+                .catch(error => console.log(error))
         } else if (action === 'edit') {
             let endpoint = `http://localhost:8080/pelanggaran/${idPelanggaran}`
             let request = {
@@ -110,12 +110,27 @@ export default function Pelanggaran() {
 
             /** send data untuk update pelanggaran */
             axios.put(endpoint, request, authorization)
-            .then(response => {
-                showToast(response.data.message)
-                /** refresh data pelanggaran */
-                getData()
-            })
-            .catch(error => console.log(error))
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh data pelanggaran */
+                    getData()
+                })
+                .catch(error => console.log(error))
+        }
+    }
+
+    let hapusData = item => {
+        if (window.confirm(`Data yang telah dihapus tidak dapat dikembalikan`)) {
+            let endpoint = `http://localhost:8080/pelanggaran/${item.id_pelanggaran}`
+
+            /** send data untuk menghapus */
+            axios.delete(endpoint, authorization)
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh data pelanggaran */
+                    getData()
+                })
+                .catch(error => console.log(error))
         }
     }
 
@@ -181,7 +196,8 @@ export default function Pelanggaran() {
                                             <span className="fa fa-edit"></span>
                                         </button>
                                         {/** tombol delete */}
-                                        <button className="btn btn-sm btn-danger mx-1">
+                                        <button className="btn btn-sm btn-danger mx-1"
+                                            onClick={() => hapusData(item)}>
                                             <span className="fa fa-trash"></span>
                                         </button>
                                     </div>
