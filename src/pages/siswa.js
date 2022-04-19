@@ -96,15 +96,48 @@ export default function Siswa() {
 
             /** sending data */
             axios.post(endpoint, request, authorization)
-            .then(response => {
-                showToast(response.data.message)
-                /** refresh newest data */
-                getData()
-            })
-            .catch(error => console.log(error))
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh newest data */
+                    getData()
+                })
+                .catch(error => console.log(error))
 
         } else if (action === "edit") {
-            
+            let endpoint = `http://localhost:8080/siswa/${idSiswa}`
+            let request = new FormData()
+            request.append('nis', nis)
+            request.append('nama', nama)
+            request.append('kelas', kelas)
+            request.append('poin', poin)
+
+            if (uploadImage === true) {
+                request.append('image', image)
+            }
+
+            /** sending data */
+            axios.put(endpoint, request, authorization)
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh newest data */
+                    getData()
+                })
+                .catch(error => console.log(error))
+        }
+    }
+
+    let hapusSiswa = item => {
+        if (window.confirm(`Data siswa yang telah dihapus tidak dapat dikembalikan`)) {
+            let endpoint = `http://localhost:8080/siswa/${item.id_siswa}`
+
+            /** send data untuk menghapus */
+            axios.delete(endpoint, authorization)
+                .then(response => {
+                    showToast(response.data.message)
+                    /** refresh data pelanggaran */
+                    getData()
+                })
+                .catch(error => console.log(error))
         }
     }
 
@@ -164,10 +197,11 @@ export default function Siswa() {
                                         <small className="text-info">Options</small>
                                         <br />
                                         <button className="btn btn-outline-primary"
-                                        onClick={() => editSiswa(item)}>
+                                            onClick={() => editSiswa(item)}>
                                             Edit
                                         </button>
-                                        <button className="btn btn-danger m-2">
+                                        <button className="btn btn-danger m-2"
+                                            onClick={() => hapusSiswa(item)}>
                                             Hapus
                                         </button>
                                     </div>
@@ -224,10 +258,17 @@ export default function Siswa() {
                                         {/** input Image */}
                                         Image
                                         <input type="file"
-                                            className="form-control mb-2"
-                                            required = {uploadImage}
+                                            className={`form-control mb-2 ${uploadImage ? `` : `d-none`}`}
+                                            required={uploadImage}
                                             accept="image/*"
-                                            onChange={ev => setImage(ev.target.files[0])} />
+                                            onChange={ev => setImage(ev.target.files[0])} /> <br />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setUploadImage(true)}
+                                            className={`btn btn-sm btn-outline-secondary mt-1 ${uploadImage ? `d-none` : ``}`}>
+                                            Click to change image
+                                        </button> <br />
 
                                         {/** button utk submit */}
                                         <button type="submit" className="btn btn-sm btn-success mt-1">
