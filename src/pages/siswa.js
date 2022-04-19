@@ -13,6 +13,8 @@ export default function Siswa() {
 
     let [message, setMessage] = useState("")
     let [modal, setModal] = useState(null)
+    let [uploadImage, setUploadImage] = useState(true)
+
     /** prepare token */
     let token = localStorage.getItem(`token-pelanggaran`)
     let authorization = {
@@ -59,6 +61,51 @@ export default function Siswa() {
         setPoin(0)
         setImage(null)
         setAction("insert")
+        setUploadImage(true)
+    }
+
+    let editSiswa = item => {
+        /** open modal */
+        modal.show()
+
+        /** mengisi inputan sesuai data yg dipilih */
+        setIdSiswa(item.id_siswa)
+        setNis(item.nis)
+        setNama(item.nama)
+        setKelas(item.kelas)
+        setPoin(item.poin)
+        setImage(null)
+        setAction("edit")
+        setUploadImage(false)
+    }
+
+    let simpanSiswa = ev => {
+        ev.preventDefault()
+
+        /** close modal */
+        modal.hide()
+
+        if (action === "insert") {
+            let endpoint = `http://localhost:8080/siswa`
+            let request = new FormData()
+            request.append('nis', nis)
+            request.append('nama', nama)
+            request.append('kelas', kelas)
+            request.append('poin', poin)
+            request.append('image', image)
+
+            /** sending data */
+            axios.post(endpoint, request, authorization)
+            .then(response => {
+                showToast(response.data.message)
+                /** refresh newest data */
+                getData()
+            })
+            .catch(error => console.log(error))
+
+        } else if (action === "edit") {
+            
+        }
     }
 
     useEffect(() => {
@@ -116,7 +163,8 @@ export default function Siswa() {
                                         <h5>{item.poin}</h5>
                                         <small className="text-info">Options</small>
                                         <br />
-                                        <button className="btn btn-outline-primary">
+                                        <button className="btn btn-outline-primary"
+                                        onClick={() => editSiswa(item)}>
                                             Edit
                                         </button>
                                         <button className="btn btn-danger m-2">
@@ -144,7 +192,7 @@ export default function Siswa() {
                                     </h4>
                                 </div>
                                 <div className="modal-body">
-                                    <form>
+                                    <form onSubmit={(ev) => simpanSiswa(ev)}>
                                         {/** input NIS */}
                                         NIS
                                         <input type="number"
@@ -177,13 +225,12 @@ export default function Siswa() {
                                         Image
                                         <input type="file"
                                             className="form-control mb-2"
-                                            required
+                                            required = {uploadImage}
                                             accept="image/*"
-                                            value={image}
-                                            onChange={ev => setImage(ev.target.value[0])} />
+                                            onChange={ev => setImage(ev.target.files[0])} />
 
                                         {/** button utk submit */}
-                                        <button className="btn btn-sm btn-success mt-1">
+                                        <button type="submit" className="btn btn-sm btn-success mt-1">
                                             <span className="fa fa-check"></span> Simpan
                                         </button>
                                     </form>
