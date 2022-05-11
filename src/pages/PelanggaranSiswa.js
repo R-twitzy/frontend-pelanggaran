@@ -118,9 +118,9 @@ export default function PelanggaranSiswa() {
                         </div>
                     </div>
 
-                    isi dari selected siswa: {selectedSiswa} <br />
+                    {/* isi dari selected siswa: {selectedSiswa} <br />
                     isi dari selected Date: {selectedDate} <br />
-                    isi dari selected pelanggaran: {selectedPelanggaran.map(item => `${item.id_pelanggaran}, `)}
+                    isi dari selected pelanggaran: {selectedPelanggaran.map(item => `${item.id_pelanggaran}, `)} */}
                 </div>
             </div>
         </div>
