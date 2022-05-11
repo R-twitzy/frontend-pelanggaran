@@ -57,6 +57,29 @@ export default function PelanggaranSiswa() {
         setSelectedPelanggaran(temp)
     }
 
+    let simpanPelanggaranSiswa = () => {
+        if (window.confirm(`Are u sure bby?`)) {
+            // ambil id user dari local storage
+            let user = localStorage.getItem(`user-pelanggaran`)
+            let id = user.id_user
+
+            let endpoint = `http://localhost:8080/pelanggaran_siswa`
+            let request = {
+                "waktu": selectedDate,
+                "id_siswa": selectedSiswa,
+                "id_user": id,
+                "detail_pelanggaran_siswa": selectedPelanggaran
+            }
+
+            // sending data
+            axios.post(endpoint, request, authorization)
+                .then(result => {
+                    alert(result.data.message)
+                })
+                .catch(error => console.log(error))
+        }
+    }
+
     useEffect(() => {
         getSiswa()
         getPelanggaran()
@@ -117,6 +140,11 @@ export default function PelanggaranSiswa() {
                             ))}
                         </div>
                     </div>
+
+                    <button className="btn btn-outline-success"
+                        onClick={() => simpanPelanggaranSiswa()}>
+                        <span className="fa fa-save me-2"></span>Simpan
+                    </button>
 
                     {/* isi dari selected siswa: {selectedSiswa} <br />
                     isi dari selected Date: {selectedDate} <br />
