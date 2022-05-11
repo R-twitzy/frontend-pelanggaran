@@ -60,7 +60,7 @@ export default function PelanggaranSiswa() {
     let simpanPelanggaranSiswa = () => {
         if (window.confirm(`Are u sure bby?`)) {
             // ambil id user dari local storage
-            let user = localStorage.getItem(`user-pelanggaran`)
+            let user = JSON.parse(localStorage.getItem(`user-pelanggaran`))
             let id = user.id_user
 
             let endpoint = `http://localhost:8080/pelanggaran_siswa`
