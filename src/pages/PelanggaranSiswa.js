@@ -3,6 +3,9 @@ import axios from "axios"
 export default function PelanggaranSiswa() {
     let [siswa, setSiswa] = useState([])
     let [pelanggaran, setPelanggaran] = useState([])
+    let [selectedSiswa, setSelectedSiswa] = useState("")
+    let [selectedDate, setSelectedDate] = useState("")
+    let [selectedPelanggaran, setSelectedPelanggaran] = useState([])
 
     let token = localStorage.getItem(`token-pelanggaran`)
     let authorization = {
@@ -31,6 +34,29 @@ export default function PelanggaranSiswa() {
             .catch(error => console.log(error))
     }
 
+    let addPelanggaran = (id_pelanggaran) => {
+        // cek keberadaan id_pelanggaran di dlm selectedpelanggaran
+        let temp = [...selectedPelanggaran]
+        let found = temp.find(
+            item => item.id_pelanggaran === id_pelanggaran
+        )
+
+        // jika ditemukan maka dihapus
+        // jika tidak ketemu ditambahkan
+        if (found) {
+            let index = temp.findIndex(
+                item => item.id_pelanggaran === id_pelanggaran
+            )
+            temp.splice(index, 1)
+        } else {
+            //memasukkan id pelanggaran yang dipilih ke selected pelanggaran
+            temp.push({
+                id_pelanggaran: id_pelanggaran
+            })
+        }
+        setSelectedPelanggaran(temp)
+    }
+
     useEffect(() => {
         getSiswa()
         getPelanggaran()
@@ -49,7 +75,10 @@ export default function PelanggaranSiswa() {
                             Pilih Siswa
                         </div>
                         <div className="col-10 my-1">
-                            <select className="form-control">
+                            <select
+                                className="form-control"
+                                onChange={ev => setSelectedSiswa(ev.target.value)}
+                                value={selectedSiswa} >
                                 <option value="">
                                     --- List Siswa ---
                                 </option>
@@ -67,7 +96,9 @@ export default function PelanggaranSiswa() {
                         </div>
                         <div className="col-10 my-1">
                             <input type="date"
-                                className="form-control" />
+                                className="form-control"
+                                onChange={ev => setSelectedDate(ev.target.value)}
+                                value={selectedDate} />
                         </div>
                         <div className="col-2 my-1">
                             Pilih Pelanggaran
@@ -78,13 +109,18 @@ export default function PelanggaranSiswa() {
                                     key={`ppp${item.id_pelanggaran}`} >
                                     <input className="me-1"
                                         type={"checkbox"}
-                                        value={item.id_pelanggaran}
+                                        value={item.id_pelanggarn}
+                                        onClick={() => addPelanggaran(item.id_pelanggaran)}
                                     />
                                     {item.nama_pelanggaran}
                                 </div>
                             ))}
                         </div>
                     </div>
+
+                    isi dari selected siswa: {selectedSiswa} <br />
+                    isi dari selected Date: {selectedDate} <br />
+                    isi dari selected pelanggaran: {selectedPelanggaran.map(item => `${item.id_pelanggaran}, `)}
                 </div>
             </div>
         </div>
