@@ -4,6 +4,10 @@ import { Toast } from "bootstrap";
 import { Modal } from "bootstrap";
 
 export default function Pelanggaran() {
+    if (!localStorage.getItem("token-pelanggaran")) {
+        window.location.href = "/signin"
+    }
+
     let [pelanggaran, setPelanggaran] = useState([])
     let [message, setMessage] = useState("")
 

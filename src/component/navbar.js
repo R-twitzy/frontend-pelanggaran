@@ -37,7 +37,7 @@ export default function Navbar() {
                             </li>
                         </ul>
                         <a class="nav-link h6" href="login.php">
-                            <Link to="/signin" className="nav-link align-text-bottom text-danger" aria-current="page">
+                            <Link to="/logout" className="nav-link align-text-bottom text-danger" aria-current="page">
                                 Logout
                             </Link>
                         </a>

@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Modal, Toast } from "bootstrap";
 export default function User() {
+    if (!localStorage.getItem("token-pelanggaran")) {
+        window.location.href = "/signin"
+    }
+
     let [user, setUser] = useState([])
     let [idUser, setIdUser] = useState(0)
     let [namaUser, setNamaUser] = useState("")

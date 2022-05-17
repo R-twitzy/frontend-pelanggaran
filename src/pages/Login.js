@@ -31,6 +31,7 @@ export default function Login() {
                     let dataUser = JSON.stringify(response.data.dataUser)
                     localStorage.setItem(`user-pelanggaran`, dataUser)
                     alert(`Login Berhhasil`)
+                    window.location.href = "/"
                 } else{
                     alert( `invalid username or password`)
                 }

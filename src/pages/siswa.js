@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Modal, Toast } from "bootstrap";
 export default function Siswa() {
+    if (!localStorage.getItem("token-pelanggaran")) {
+        window.location.href = "/signin"
+    }
+
     let [siswa, setSiswa] = useState([])
     let [idSiswa, setIdSiswa] = useState(0)
     let [nis, setNis] = useState(0)
